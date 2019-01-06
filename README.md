@@ -6,7 +6,7 @@ This webapp tries to solve that problem
 
 Used Django, Bootstrap and FacebookAPI. Not finished yet
 
-###TO-DO
+### TO-DO
 - Show all the pages liked (currently showing 100)
 - Get the checkmarks response and update to Facebook
 - Re-design
