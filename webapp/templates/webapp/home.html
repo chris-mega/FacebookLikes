@@ -18,6 +18,7 @@
     <div class="fb-login-button" scope="public_profile,email,user_likes" onlogin="checkLoginState();" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="true"></div>
     <div id="profile"></div>
     <div id="likes"></div>
+    <button type="button" class="btn btn-primary">Update</button>
     {% block content %}
     {% endblock %}
   </div>
@@ -90,51 +91,64 @@
     // Here we run a very simple test of the Graph API after login is
     // successful.  See statusChangeCallback() for when this call is made.
     function testAPI() {
-      //console.log('Welcome!  Fetching your information.... ');
-      FB.api('/me?fields=name,email', function(response) {
-        if(response && !response.error){
-          console.log(response);
-          buildProfile(response);
-          //document.getElementById('status').innerHTML = 'Thanks for logging in, ' + response.name + '!';
+      FB.api(
+        '/me',
+        'GET',
+        {"fields":"name,email,likes.summary(true)"},
+        function(response) {
+          if(response && !response.error){
+            console.log(response);
+            buildProfile(response);
+          }
         }
-      });
-      FB.api('/me?fields=likes.summary(true)', function(response) {
-        if(response && !response.error){
-          console.log(response);
-          buildLikes(response);
-        }
-      });
-    }
+      );
 
+      FB.api(
+        '/me',
+        'GET',
+        {"fields":"likes.limit(100)"},
+        function(response) {
+          if(response && !response.error){
+            console.log(response);
+            buildLikes(response);
+          }
+        }
+      );
+    }
     function buildProfile(user){
       let profile =`
         <h2>${user.name}</h2>
         <ul class="list-group">
           <li class="list-group-item">Email: ${user.email}</li>
         </ul>
-
+        <div>
+          <h3>Pages liked approx.: ${user.likes.summary.total_count}</h3>
+          <p>Mark the pages that you would like to unlike:</p>
+        </div>
       `;
       document.getElementById('profile').innerHTML=profile;
     }
     function buildLikes(user){
       let output=`
-        <div>
-          <h3>Pages liked approx.: ${user.likes.summary.total_count}</h3>
-          <p>Mark the pages that you would like to unlike:</p>
+        <div style="background-color:white">
       `;
-      for(let i in user.likes.data){
-        if(user.likes.data[i].name){
-          output+=`
-          <div class="form-check" style="background-color:white">
-            <label class="form-check-label">
-              ${user.likes.data[i].name}<input type="checkbox" class="form-check-input" value="">
-            </label>
-          </div>
-          `;
+      var lk=user.likes;
+      //while(lk){
+        for(let i in lk.data){
+          if(lk.data[i].name){
+            output+=`
+            <div class="form-check" >
+              <label class="form-check-label">
+                ${lk.data[i].name} <input type="checkbox" class="form-check-input" value="">
+              </label>
+            </div>
+            `;
+          }
         }
-        output+=`</div>`;
-        document.getElementById('likes').innerHTML=output;
-      }
+        output+=`${user.likes.paging.next}`;
+      //}
+      output+=`</div>`;
+      document.getElementById('likes').innerHTML=output;
     }
   </script>
 </div>
