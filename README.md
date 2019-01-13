@@ -4,7 +4,8 @@ Users who are long time in Facebook have liked pages over the time. As time pass
 For some people it would be easy to unlike pages if the amount is manageable, but for others who have more than a thousand pages liked, it becomes a very slow and tedious process.
 This webapp tries to solve that problem
 
-Used Django, Bootstrap and FacebookAPI. Not finished yet
+This project is to learn, explore and practice about: Django, Bootstrap, HTML, CSS, JavaScript, Python and FacebookAPI.
+Not finished yet
 
 ### TO-DO
 - Show all the pages liked (currently showing 100)
