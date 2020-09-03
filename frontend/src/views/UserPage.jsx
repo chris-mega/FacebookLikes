@@ -17,6 +17,8 @@
 */
 import React from "react";
 import { connect } from 'react-redux';
+import axios from 'axios';
+import config from "../config"
 // reactstrap components
 import {
   Card,
@@ -30,8 +32,19 @@ import PanelHeader from "components/PanelHeader/PanelHeader.jsx";
 import Sidebar from "components/Sidebar/Sidebar";
 
 class User extends React.Component {
+  state = {
+    pic: null
+  }
+  async componentDidMount(){
+    const { accessToken, id } = this.props.user;
+    const url = config.graphApi + `/${id}/picture?type=large&access_token=${accessToken}`;
+    const res = await axios.get(url);
+    this.setState({pic: res.request.responseURL})
+  }
+
   render() {
     const { name, email } = this.props.user;
+    const { pic } = this.state;
     return (
       <>
         <Sidebar {...this.props}/>
@@ -43,21 +56,17 @@ class User extends React.Component {
                 <Card className="card-user">
                   <CardBody>
                     <div className="author">
-                      <a href="#pablo" onClick={e => e.preventDefault()}>
+                      <div>
                         <img
-                          alt="..."
+                          alt="profile picture"
                           className="avatar border-gray"
-                          src={require("assets/img/mike.jpg")}
+                          src={pic}
                         />
                         <h5 className="title">{name}</h5>
-                      </a>
-                      <p className="description">michael24</p>
+                      </div>
+                      <p className="description">{email}</p>
                     </div>
-                    <p className="description text-center">
-                      {email}
-                    </p>
                   </CardBody>
-                  <hr />
                 </Card>
               </Col>
             </Row>

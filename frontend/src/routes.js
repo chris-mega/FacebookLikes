@@ -25,14 +25,12 @@ var dashRoutes = [
     name: "Dashboard",
     icon: "design_app",
     component: Dashboard,
-    layout: "/admin"
   },
   {
     path: "/user-page",
     name: "User Profile",
     icon: "users_single-02",
     component: UserPage,
-    layout: "/admin"
   },
   {
     
@@ -40,7 +38,6 @@ var dashRoutes = [
     name: "Table List",
     icon: "files_paper",
     component: TableList,
-    layout: "/admin"
   },
 ];
 export default dashRoutes;

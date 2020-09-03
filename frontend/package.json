@@ -5,6 +5,7 @@
   "private": true,
   "homepage": "https://demos.creative-tim.com/now-ui-dashboard-react/#/",
   "dependencies": {
+    "axios": "^0.20.0",
     "bootstrap": "4.3.1",
     "chart.js": "2.8.0",
     "history": "4.9.0",
