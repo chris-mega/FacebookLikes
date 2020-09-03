@@ -44,7 +44,7 @@ ReactDOM.render(
       <PrivateRoute exact path="/" component={UserPage} />
       <PrivateRoute path="/dashboard" component={Dashboard} />
       <PrivateRoute path="/user-page" component={UserPage} />
-      <PrivateRoute path="/extended-tables" component={TableList} />
+      <PrivateRoute path="/liked-pages" component={TableList} />
     </Router>
   </Provider>,
   document.getElementById("root")

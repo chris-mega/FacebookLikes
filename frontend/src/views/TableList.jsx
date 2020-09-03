@@ -91,7 +91,7 @@ class RegularTables extends React.Component {
               <Col xs={12}>
                 <Card>
                   <CardHeader>
-                    <CardTitle tag="h4">Simple Table</CardTitle>
+                    <CardTitle tag="h4">Pages that you Liked</CardTitle>
                   </CardHeader>
                   <CardBody>
                     <Table responsive>

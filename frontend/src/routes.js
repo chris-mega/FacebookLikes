@@ -34,8 +34,8 @@ var dashRoutes = [
   },
   {
     
-    path: "/extended-tables",
-    name: "Table List",
+    path: "/liked-pages",
+    name: "Liked Pages",
     icon: "files_paper",
     component: TableList,
   },
