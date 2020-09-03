@@ -25,109 +25,110 @@ import {
   CardTitle,
   Table,
   Row,
-  Col
+  Col,
+  Input,
+  FormGroup,
+  Label,
+  Button
 } from "reactstrap";
-
+import Sidebar from "components/Sidebar/Sidebar";
+import axios from 'axios'
+import config from "../config"
 // core components
 import PanelHeader from "components/PanelHeader/PanelHeader.jsx";
-
-import { thead, tbody } from "variables/general";
+import { connect } from 'react-redux';
 
 class RegularTables extends React.Component {
+
+  constructor(props){
+    super(props);
+    this.state = {
+      pages: [],
+      nextLink: ''
+    }
+    this.callMore = this.callMore.bind(this);
+  }
+  
+  
+  async callMore(){
+    const { nextLink } = this.state;
+    await this.callFb(nextLink)
+  }
+
+  async callFb(url){
+    const { pages } = this.state;
+    const res = await axios.get(url);
+    if(res && res.data){
+      for(var page of res.data.data){
+        page.toDelete = false;
+        pages.push(page);
+      }
+      this.setState({
+        nextLink: res.data.paging.next,
+        pages: pages
+      })
+    }
+  }
+
+  async componentWillMount(){
+    const { accessToken, id } = this.props.user;
+    const url = config.graphApi + `/${id}/likes?summary=true&limit=100&fields=id,name,link&access_token=${accessToken}`;
+    await this.callFb(url)
+  }
+
   render() {
+    const { pages } = this.state;
     return (
       <>
-        <PanelHeader size="sm" />
-        <div className="content">
-          <Row>
-            <Col xs={12}>
-              <Card>
-                <CardHeader>
-                  <CardTitle tag="h4">Simple Table</CardTitle>
-                </CardHeader>
-                <CardBody>
-                  <Table responsive>
-                    <thead className="text-primary">
-                      <tr>
-                        {thead.map((prop, key) => {
-                          if (key === thead.length - 1)
-                            return (
-                              <th key={key} className="text-right">
-                                {prop}
-                              </th>
-                            );
-                          return <th key={key}>{prop}</th>;
-                        })}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {tbody.map((prop, key) => {
-                        return (
+        <Sidebar {...this.props}/>
+        <div className="main-panel" ref={this.mainPanel}>
+          <PanelHeader size="sm" />
+          <div className="content">
+            <Row>
+              <Col xs={12}>
+                <Card>
+                  <CardHeader>
+                    <CardTitle tag="h4">Simple Table</CardTitle>
+                  </CardHeader>
+                  <CardBody>
+                    <Table responsive>
+                      <thead className="text-primary">
+                        <tr>
+                          <th>Page Name</th>
+                          <th>Unlike?</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {pages.map((page, key) => 
                           <tr key={key}>
-                            {prop.data.map((prop, key) => {
-                              if (key === thead.length - 1)
-                                return (
-                                  <td key={key} className="text-right">
-                                    {prop}
-                                  </td>
-                                );
-                              return <td key={key}>{prop}</td>;
-                            })}
+                            <td><a href={page.link}>{page.name}</a></td>
+                            <td>
+                              <FormGroup check>
+                                <Label check>
+                                  <Input type="checkbox" />
+                                  <span className="form-check-sign" />
+                                </Label>
+                              </FormGroup>
+                            </td>
                           </tr>
-                        );
-                      })}
-                    </tbody>
-                  </Table>
-                </CardBody>
-              </Card>
-            </Col>
-            <Col xs={12}>
-              <Card className="card-plain">
-                <CardHeader>
-                  <CardTitle tag="h4">Table on Plain Background</CardTitle>
-                  <p className="category"> Here is a subtitle for this table</p>
-                </CardHeader>
-                <CardBody>
-                  <Table responsive>
-                    <thead className="text-primary">
-                      <tr>
-                        {thead.map((prop, key) => {
-                          if (key === thead.length - 1)
-                            return (
-                              <th key={key} className="text-right">
-                                {prop}
-                              </th>
-                            );
-                          return <th key={key}>{prop}</th>;
-                        })}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {tbody.map((prop, key) => {
-                        return (
-                          <tr key={key}>
-                            {prop.data.map((prop, key) => {
-                              if (key === thead.length - 1)
-                                return (
-                                  <td key={key} className="text-right">
-                                    {prop}
-                                  </td>
-                                );
-                              return <td key={key}>{prop}</td>;
-                            })}
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </Table>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
+                        )}
+                        <tr>
+                          <td><Button onClick={this.callMore}>Load More</Button></td>
+                          <td><Button>Unlike Pages</Button></td>
+                        </tr>
+                      </tbody>
+                    </Table>
+                  </CardBody>
+                </Card>
+              </Col>
+            </Row>
+          </div>
         </div>
       </>
     );
   }
 }
 
-export default RegularTables;
+export default connect((state) => ({
+  user: state.authReducer.user
+}))(RegularTables);

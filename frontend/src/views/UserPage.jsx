@@ -35,7 +35,7 @@ class User extends React.Component {
   state = {
     pic: null
   }
-  async componentDidMount(){
+  async componentWillMount(){
     const { accessToken, id } = this.props.user;
     const url = config.graphApi + `/${id}/picture?type=large&access_token=${accessToken}`;
     const res = await axios.get(url);
