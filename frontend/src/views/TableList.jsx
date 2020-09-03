@@ -44,7 +44,8 @@ class RegularTables extends React.Component {
     super(props);
     this.state = {
       pages: [],
-      nextLink: ''
+      nextLink: '',
+      loadingPages: false,
     }
     this.callMore = this.callMore.bind(this);
   }
@@ -56,6 +57,7 @@ class RegularTables extends React.Component {
   }
 
   async callFb(url){
+    this.setState({loadingPages: true})
     const { pages } = this.state;
     const res = await axios.get(url);
     if(res && res.data){
@@ -65,7 +67,8 @@ class RegularTables extends React.Component {
       }
       this.setState({
         nextLink: res.data.paging.next,
-        pages: pages
+        pages: pages,
+        loadingPages: false,
       })
     }
   }
@@ -77,7 +80,7 @@ class RegularTables extends React.Component {
   }
 
   render() {
-    const { pages } = this.state;
+    const { pages, loadingPages } = this.state;
     return (
       <>
         <Sidebar {...this.props}/>
@@ -113,7 +116,13 @@ class RegularTables extends React.Component {
                           </tr>
                         )}
                         <tr>
-                          <td><Button onClick={this.callMore}>Load More</Button></td>
+                          <td>
+                            <Button
+                              disabled={loadingPages}
+                              onClick={!loadingPages ? this.callMore : null}>
+                                {loadingPages ? 'Loading…' : 'Load More'}
+                            </Button>
+                          </td>
                           <td><Button>Unlike Pages</Button></td>
                         </tr>
                       </tbody>
