@@ -8,10 +8,11 @@ const mapStateToProps = state => {
   }
 }
 
-const PrivateRoute = ({ logged, component: Component, path }) => {
+const PrivateRoute = ({ logged, component: Component, path, ...rest }) => {
    return (
      <Route
        path={path}
+       {...rest}
        render={props =>
          logged ? (
            <Component {...props} />

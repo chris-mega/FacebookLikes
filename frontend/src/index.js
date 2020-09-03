@@ -28,7 +28,9 @@ import "assets/css/demo.css";
 
 import PrivateRoute from "layouts/PrivateRoute";
 import Login from "views/login";
-import AdminLayout from "layouts/Admin";
+import Dashboard from "views/Dashboard.jsx";
+import TableList from "views/TableList.jsx";
+import UserPage from "views/UserPage.jsx";
 import rootReducer from './redux/reducers/index'
 
 const store = createStore(rootReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
@@ -39,7 +41,10 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={hist}>
       <Route path="/login" component={Login} />
-      <PrivateRoute path="/admin" component={AdminLayout} />
+      <PrivateRoute exact path="/" component={UserPage} />
+      <PrivateRoute path="/dashboard" component={Dashboard} />
+      <PrivateRoute path="/user-page" component={UserPage} />
+      <PrivateRoute path="/extended-tables" component={TableList} />
     </Router>
   </Provider>,
   document.getElementById("root")

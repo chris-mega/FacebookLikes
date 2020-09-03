@@ -23,6 +23,7 @@ import { Nav } from "reactstrap";
 import PerfectScrollbar from "perfect-scrollbar";
 
 import logo from "logo-white.svg";
+import routes from "routes.js";
 
 var ps;
 
@@ -50,7 +51,7 @@ class Sidebar extends React.Component {
   }
   render() {
     return (
-      <div className="sidebar" data-color={this.props.backgroundColor}>
+      <div className="sidebar" data-color='blue'>
         <div className="logo">
           <a
             href="https://www.creative-tim.com?ref=nudr-sidebar"
@@ -71,18 +72,18 @@ class Sidebar extends React.Component {
         </div>
         <div className="sidebar-wrapper" ref="sidebar">
           <Nav>
-            {this.props.routes.map((prop, key) => {
+            {routes.map((prop, key) => {
               if (prop.redirect) return null;
               return (
                 <li
                   className={
-                    this.activeRoute(prop.layout + prop.path) +
+                    this.activeRoute(prop.path) +
                     (prop.pro ? " active active-pro" : "")
                   }
                   key={key}
                 >
                   <NavLink
-                    to={prop.layout + prop.path}
+                    to={prop.path}
                     className="nav-link"
                     activeClassName="active"
                   >

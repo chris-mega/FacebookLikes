@@ -23,7 +23,7 @@ const Login = ({ dispatch }) => {
     <React.Fragment>
       {
         logged ? (
-          <Redirect to="/admin" />
+          <Redirect to="/" />
         ) : (
           <div className="main-login">
             <FacebookLogin
